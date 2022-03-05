@@ -1,5 +1,7 @@
 package com.lokman.locationweb.Controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -30,4 +32,14 @@ public class LocationController {
 		return "createLocation";
 
 	}
+
+	@GetMapping("/displayLocations")
+	public String displayLocations(ModelMap map) {
+
+		List<Location> locations = locationService.getAllLocations();
+		map.addAttribute("locations", locations);
+
+		return "displayLocations";
+	}
+
 }

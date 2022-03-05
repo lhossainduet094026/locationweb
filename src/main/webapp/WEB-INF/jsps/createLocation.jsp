@@ -18,5 +18,7 @@
 	</pre>
 </head>
 <body>${successMessage}
+<br/>
+<a href="displayLocations">View all</a>
 </body>
 </html>
