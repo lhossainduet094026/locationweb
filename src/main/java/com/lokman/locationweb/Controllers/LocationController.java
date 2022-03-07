@@ -44,7 +44,7 @@ public class LocationController {
 	}
 
 	@GetMapping("/deleteLocation")
-	public String displayLocations(@RequestParam("id") int id, ModelMap map) {
+	public String deleteLocations(@RequestParam("id") int id, ModelMap map) {
 
 		Location location = locationService.getLocationById(id);
 		locationService.deleteLocation(location);
@@ -53,6 +53,25 @@ public class LocationController {
 		map.addAttribute("locations", locations);
 
 		return "displayLocations";
+	}
+
+	@GetMapping("/editLocation")
+	public String editLocations(@RequestParam("id") int id, ModelMap map) {
+
+		Location location = locationService.getLocationById(id);
+		map.addAttribute("location", location);
+
+		return "editLocation";
+	}
+	
+	@PostMapping("/updateLoc")
+	public String updateLocation(@ModelAttribute("location") Location location, ModelMap map) {
+
+		locationService.updateLocation(location);
+		List<Location> locations = locationService.getAllLocations();
+		map.addAttribute("locations", locations);
+		return "displayLocations";
+
 	}
 
 }
