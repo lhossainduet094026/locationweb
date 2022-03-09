@@ -11,13 +11,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lokman.locationweb.Services.LocationService;
+import com.lokman.locationweb.Util.EmailUtil;
 import com.lokman.locationweb.entities.Location;
 
 @Controller
 public class LocationController {
 
 	@Autowired
-	LocationService locationService;
+	private LocationService locationService;
+
+	@Autowired
+	private EmailUtil emailUtil;
 
 	@GetMapping("/showCreate")
 	public String createLocation() {
@@ -30,6 +34,8 @@ public class LocationController {
 		Location locaton = locationService.saveLocaton(location);
 		String successMessage = "Location with Id:" + locaton.getId() + " successfully saved.";
 		map.addAttribute("successMessage", successMessage);
+		emailUtil.sendEmail("lhossainduet094026@gmail.com", "Location saved email",
+				"Location was saved successfully.Enjoy your new location");
 		return "createLocation";
 
 	}
@@ -63,7 +69,7 @@ public class LocationController {
 
 		return "editLocation";
 	}
-	
+
 	@PostMapping("/updateLoc")
 	public String updateLocation(@ModelAttribute("location") Location location, ModelMap map) {
 
