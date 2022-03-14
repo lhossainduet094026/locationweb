@@ -9,7 +9,7 @@ import com.lokman.locationweb.entities.Location;
 
 public interface LocationRepository extends JpaRepository<Location, Integer> {
 
-	@Query("select type,count(type) total from location group by type")
-	List<Object[]> findTypeAndTypeCount();
+	@Query("select type,count(type) from Location group by type")
+	public List<Object[]> findTypeAndTypeCount();
 
 }

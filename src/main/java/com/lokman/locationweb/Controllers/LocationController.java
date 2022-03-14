@@ -2,6 +2,8 @@ package com.lokman.locationweb.Controllers;
 
 import java.util.List;
 
+import javax.servlet.ServletContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -10,8 +12,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.lokman.locationweb.Repositories.LocationRepository;
 import com.lokman.locationweb.Services.LocationService;
 import com.lokman.locationweb.Util.EmailUtil;
+import com.lokman.locationweb.Util.ReportUtil;
 import com.lokman.locationweb.entities.Location;
 
 @Controller
@@ -21,7 +25,16 @@ public class LocationController {
 	private LocationService locationService;
 
 	@Autowired
+	LocationRepository locationRepository;
+
+	@Autowired
 	private EmailUtil emailUtil;
+
+	@Autowired
+	ReportUtil reportUtil;
+
+	@Autowired
+	ServletContext servletContext;
 
 	@GetMapping("/showCreate")
 	public String createLocation() {
@@ -34,8 +47,8 @@ public class LocationController {
 		Location locaton = locationService.saveLocaton(location);
 		String successMessage = "Location with Id:" + locaton.getId() + " successfully saved.";
 		map.addAttribute("successMessage", successMessage);
-		emailUtil.sendEmail("lhossainduet094026@gmail.com", "Location saved email",
-				"Location was saved successfully.Enjoy your new location");
+//		emailUtil.sendEmail("lhossainduet094026@gmail.com", "Location saved email",
+//				"Location was saved successfully.Enjoy your new location");
 		return "createLocation";
 
 	}
@@ -78,6 +91,17 @@ public class LocationController {
 		map.addAttribute("locations", locations);
 		return "displayLocations";
 
+	}
+
+	@GetMapping("/generateReport")
+	public String generateReport() {
+		List<Object[]> data = locationRepository.findTypeAndTypeCount();
+		String path = servletContext.getRealPath("/");
+		System.out.println(path);
+
+		reportUtil.generatePieChart(path, data);
+
+		return "report";
 	}
 
 }
